@@ -25,6 +25,7 @@ TARGET : KERNEL PROGRAMMING AT ALL LEVELS INCLUDING FIRMWARE, DRIVERS, OS ...
 1. UDACITY : Introduction to Operating System
 2. UDACITY : Advanced OS
 3. UDACITY : GT - Refresher Advanced OS
+4. BOOK : Modern Operating Systems by Tanenbum
 4. BOOK : Advanced Programming in the UNIX Environment by Richard Stevens
 5. BOOK : Embedded Linux Primer by Christopher Hallinan
 6. BOOK : Understanding Linux Kernel by Daniel P Bovet
