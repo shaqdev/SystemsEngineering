@@ -26,12 +26,12 @@ TARGET : KERNEL PROGRAMMING AT ALL LEVELS INCLUDING FIRMWARE, DRIVERS, OS ...
 2. UDACITY : Advanced OS
 3. UDACITY : GT - Refresher Advanced OS
 4. BOOK : Modern Operating Systems by Tanenbum
-4. BOOK : Advanced Programming in the UNIX Environment by Richard Stevens
-5. BOOK : Embedded Linux Primer by Christopher Hallinan
-6. BOOK : Understanding Linux Kernel by Daniel P Bovet
-7. MINI PROJECT : AOSP
-7. BOOK : Embedded Android - Porting, Extending, and Customizing by Karim
-8. YOUTUBE : Karim Yaghmour's Embedded Android
+5. BOOK : Advanced Programming in the UNIX Environment by Richard Stevens
+6. BOOK : Embedded Linux Primer by Christopher Hallinan
+7. BOOK : Understanding Linux Kernel by Daniel P Bovet
+8. MINI PROJECT : AOSP
+9. BOOK : Embedded Android - Porting, Extending, and Customizing by Karim
+10. YOUTUBE : Karim Yaghmour's Embedded Android
 
 COMPILERS:
 1. UDACITY : Compiler Theory & Practice
