@@ -48,3 +48,9 @@ TARGET : BUILDING HIGH PERFORMACE COMPUTING
 1. EDX : Introduction to OpenCL by Intel
 
 MAIN PROJECT ON EMBEDDED SYSTEMS : YET TO DECIDE
+
+*************************************************************************************************
+
+References
+
+1. List of Computer Science books by reddit computer science community, github link : https://github.com/smellslikekeenspirit/an-askreddit-list-of-compsci-books
