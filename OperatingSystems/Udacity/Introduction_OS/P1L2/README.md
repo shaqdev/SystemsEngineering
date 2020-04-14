@@ -88,3 +88,51 @@ V14 : OS Services
 			Security,
 			...
 		- These services are abstracted by system call interface to user process.
+
+V16 : Monolithic OS
+		- Its OS organization which packs all the services required by apps or demanded by hw in to single unit. 
+		- Advantage : Since everything is packed in to single unit, OS can perform compile time optimizations.
+		- Disadvantage : Large memory footprint which can reduce application performance. 
+
+V17 : Modulur OS (eg - linux)
+		- Its the modern OS organizaiton followed by Linux. It uses modular approach of integrating the services.
+		- The OS provides basic services and interfaces for additional services. Based on the application, additional services can be integrated. These additional services are available as modules. (eg - OS needed for maintaining databases can add File System service optimized for database applications)
+		- Advantage : Less memory footprint, easy maintainability, less resource(like memory) needed.
+		- Disadvantage : Additional modular interface layer may impact apps performance, This modules are provided by 3 party vendors like IMG so can import bugs in to OS.
+
+		- It is proved practically that modular approach is more beneficial than monolithic approach.
+
+V18 : MicroKernel
+		- This kind of OS Kernels are mainly used for embedded platforms which needs less and specific services.
+		- It provided very primitive services and their abstractions like IPC, Address Space (page system), threads to name few. While many OS related services will be running in user space.
+		- Advantage : less memory footprint, easy verifiability means its exactly behaves like its expected to do. These benefits makes it ideal OS organization for real time embedded applications.
+		- Disadvantage : These kind of kernels are highly customized for spcific hw config that makes it difficult to portable across different platforms. So having multiple platform specific kernels will impose software complexity to support them all. Also it has more user/kernle transitions which is expensive in terms of performance.
+
+V19 : Linux & Mac OS Architecture
+		LINUX :		      User
+						  |
+						  LIBRARY INTERFACE (standard utility programs like shell, terminal, editors...) -> USPACE
+						  |
+						  SYSTEM CALL INTERFACE (standard libraries like glibc) -> USPACE
+						  |
+						  Linux Kernel (services like file mgt, device mgt, mem mgt...) -> KERNEL SPACE
+						  |
+						  HW (cpu, disks, memory, terminals...)
+
+		- Linux kernel is organized in a moduler way, so its easy to configure individual service components.
+
+		MAC OS X : 		  GUI (Aqua)
+						  |
+						  APP ENVIRONMENT & SERVICES (Java, Cocoa, Quicktime, BSD)
+						  |
+						  MICRO KERNEL + BSD (Mach)
+						  |
+						  IO KIT + KERNEL EXTENSIONS
+						  |
+						  HW
+
+		- BSD provides UNIX API to applications and other services.
+		- Somewhat similar to modular approach for providing support for extension, It has separate layer where kernel extension can be added.
+
+
+
