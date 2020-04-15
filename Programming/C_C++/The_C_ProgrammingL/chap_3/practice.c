@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <ctype.h> // to include isspace() and isdigit()
+#include <string.h>
 
 // Switch case to count no. of digits/white space/other chars
 void count_char();
@@ -10,6 +11,9 @@ int atoi();
 
 // shell sort
 void shellsort(int[], int);
+
+// reverse string
+void reverse(char[]);
 
 int main()
 {
@@ -44,6 +48,10 @@ int main()
 		printf("%d\t",shell_arr[i]);
 	printf("\n");
 
+	// Reverse str
+	char s[] = "khaleel";
+	reverse(s);
+	printf("reversed string : %s\n",s);
 
 return 0;
 }
@@ -117,3 +125,16 @@ void shellsort(int v[], int n)
 		}
 	}
 }
+
+// reverse a string
+void reverse(char s[])
+{
+	char temp;
+	int i, j;
+	for (i = 0, j = strlen(s)-1; i < j ; ++i,--j){
+		temp = s[i];
+		s[i] = s[j];
+		s[j] = temp;
+	}
+}
+
