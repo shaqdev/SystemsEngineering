@@ -55,3 +55,50 @@ v10 : WHAT IS A CONTEXT SWITCHING ?
 		- CONTEXT SWITCHING is EXPENSIVE, It involves DIRECT COST & INDIRECT COST. 
 		- DIRECT COST : No. of cycles needed to execute LOAD & STORE INSTRUCTIONS to and from memory.
 		- INDIRECT COST : CACHE COLD, is a result of CACHE MISSES. To be specific, when a process is 					running its data is stored in cache, which is referred as HOT CACHE. When 					context switch to other process, the data inside cache is replaced by later 					process data. Now when the context is swithced back to earlier process, 					it leads cache misses resulting to load data from memory increasing 						latency and decreasing app performance.
+
+V11 : PROCESS LIFECYCLE
+		- State Machine of a single process,
+
+								  interrupt
+				 admitted	  |====<<<<<<<=====|	    exit
+			NEW ==========> READY			RUNNING ====>>>>====TERMINATED
+							| |====>>>>>>>=====|  |
+							| schedular dispatch  |
+				I/O	or		|  					  | I/0 or 
+		   event completion |==<<<==WAITING==<<<==| event wait  					  |
+
+		- The process state changes from READY TO RUNNING when CPU starts executing the process under READY STATE.
+
+V12 : PROCESS CREATION
+		- Any OS has privilaged process running as root process right after boot process. Any process that is created after logged in to the system will have its corresponding parent process. Though both parent and child process is running individually, this parent child relation helps to trace the process and manage accordingly.
+		- Any new process created is created as child to some or other parent process. There are two mechanisms to create the new process:
+			1. FORK - It copies the parent PCB to child PCB and both parent and child process starts executing the instruction next to fork, since both have same PC.
+			2. EXEC - It replace child IMAGE with new PCB, it loads new program and starts from first instruction.
+
+		- The actual creation of PROCESS involves two mechanisms, while FORK creates a new process with PARENT PCB and EXEC replace that child image with new program and starts executing from first instruction.
+
+V13 : ROLE OF CPU SCHEDULER?
+		- It is OS component that decides which process in READY state does CPU execute.
+		- By definition, It is a OS component which determines which process in ready state processes should dispatch to the CPU and how long it should run on CPU.
+		- CPU scheduling is carried in three steps:
+			1. PREEMPT the current process and save its context
+			2. Run SCHEDULING algorithm to choose which process from ready state processes should dispatch to the CPU.
+			3. DISPATCH the process on to CPU and switch to its context.
+
+		- The CPU scheduling should be efficient and take minimum cycles to avoid overhead and incrase latency and decrease performance.
+
+V14 : How often do we RUN SCHEDULER?
+		- It determines how long does process running on CPU.
+		- More frequently running scheduler will waste cpu time running the scheduler. It will reduce the actual time CPU spent on useful work.
+		- The time given to a single process to run on CPU is called TIMESLICE. It defines how long scheduler should run.
+		- There are even some design principles to consider for scheduling,
+			- What are the appropriate timeslice values?
+			- Metrics to consider when scheduler is deciding which process it should run.
+
+V15 : What about I/O ? 
+		- While a process is running on CPU, and it raise I/O request, it will then moves it to WAITING STATE. When it receives I/O then process is moved in to READY state.
+		- Furthermore, there are many other ways a RUNNING PROCESS can go in to ready state,
+			1. I/O request
+			2. TIMESLICE expired
+			3. FORK a child
+			4. INTERRUPT 
