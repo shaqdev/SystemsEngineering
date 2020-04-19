@@ -85,7 +85,7 @@ V13 : ROLE OF CPU SCHEDULER?
 			2. Run SCHEDULING algorithm to choose which process from ready state processes should dispatch to the CPU.
 			3. DISPATCH the process on to CPU and switch to its context.
 
-		- The CPU scheduling should be efficient and take minimum cycles to avoid overhead and incrase latency and decrease performance.
+		- The CPU scheduling should be efficient and take minimum cycles to avoid overhead and increase latency and decrease performance.
 
 V14 : How often do we RUN SCHEDULER?
 		- It determines how long does process running on CPU.
@@ -102,3 +102,12 @@ V15 : What about I/O ?
 			2. TIMESLICE expired
 			3. FORK a child
 			4. INTERRUPT 
+
+V16 : INTER PROCESS COMMUNICATION (IPC) ?
+		- When does and why does processes needs to communicate with each other?
+			Any two process(belong to same app or different apps) need to share information with each other.
+		- IPC mechanisms allows data transfer between process while maintaining protection & isolation.
+		- IPC mechanisms should be flexible to support different data transfer types for max performance. Because different data transfer types has different properties.
+		- OS provides two IPC mechanisms:
+			1. MESSAGE PASSING IPC - OS manages the communication channel (shared buffer) through system calls. More reliable but more overhead due to user/kernel transitions.
+			2. SHARED MEMORY IPC - OS establish shared communication channel and maps it to certain address space of both the process. No overhead of User/Kernel transitions but less reliable and error prone.
