@@ -34,5 +34,16 @@ V5 : ARE THREADS USEFUL ON SINGLE CPU ?
 v6 : MULTI-THREADING is useful to both APP & OS ?
 		- OS kernel also uses multi-threaded programming for spawning threads working on behalf of apps and threads that run OS -level services like daemons or device drivers. MORE IN COMING LECTURES.
 
+V7 : What do we need to support threads?
+		- Data Structure for threads, to identify threads and their resource usage.
+		- Mechanism to create and manage threads
+		- Mechanism to safely coordinate between threads while running concurrently.
+		- Issues associated with concurrent execution:
+			- DATA RACE PROBLEM, since concurrent threads have same virual to physical mappings, multiple threads can access data at same time which leads to corruption.
+		The below two mechanisms are SYNCHRONIZATION MECHANISMS :
+		---------------------------------------------------------
+		- To avoid DATA RACE PROBLEM, threads must have mechanism to execute in mutually exclusive manner. which means the operation that can lead DRP should allow only one thread to perform that operation at a time. Primitive that used for mutual exclusion is MUTEX.
+		- Mutual exclusion is also helpful while one thread is waitng for other thread execution to complete and specify what it wants from it. The primitive used for this mechanism is called CONDITION VARIABLE.
 
-
+V8 : THREAD & THREAD CREATION:
+		
