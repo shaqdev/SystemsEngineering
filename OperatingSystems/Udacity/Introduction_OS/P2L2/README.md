@@ -46,4 +46,37 @@ V7 : What do we need to support threads?
 		- Mutual exclusion is also helpful while one thread is waitng for other thread execution to complete and specify what it wants from it. The primitive used for this mechanism is called CONDITION VARIABLE.
 
 V8 : THREAD & THREAD CREATION:
+		- We need Thread DS that has information related to thread (like ID, PC, SP, REGISTERS, STACK, ATTRIBUTES used by OS to manage thread)
+		- Creating a thread as proposed by BIRREL, FORK that returns thread handler of type thread data structure.
+		- BIRREL proposes one more mechanism called JOIN that will make parent thread to wait till child thread terminates and returns the FIRST PROCEDURE VALUE. If child thread terminates even before join call, it returs immediately (WHAT ABOUT RETURN VALUE, WILL IT BE LIVE OR EVAPORATED ? I feel EVAPORATED).
+
+V9 : THREAD CREATION:
+		- t = fork(procedure, arguments)
+		- join(t)
+
+V10 : LINKED LIST updated with THREADS ?
+		- While two threads trying to update list concurrently, since two threads will be interleaved on the cores randomly, only last executed thread will be updated while first updated will be overridden.
+
+V11 : MUTUAL EXCLUSION ?
+		- MUTUAL EXCLUSION is a mechanism to provide lock around some section of the code. This lock is referred as MUTEX and section is referred as CRITICAL SECTION.
+		- The other threads when reached already locked CRITICAL SECTION should wait till the owner of the critical section unlocks it.
+		- As soon as the thread that aquired MUTEX unlocks it, any thread already waiting one or just that requested lock can take control of the MUTEX. 
+		- More modern OS uses lock and unlock as two separate API's unlike single LOCK CLAUSE with {} by BIRREL.
+
+V12 : USING PREVIOUS LINKED LIST AND APPY MUTEX FOR SAFE INSERTION
+
+V13 : PRODUCER/CONSUMER EXAMPLE ?
+		- PRODUCER has 10 threads which contineously insert to the LIST one after other
+		- CONSUMER will check if LIST is FULL, PRINTS & CLEARS the LIST if FULL.
+		- In the CONSUMER procedure it contineously POOLS to check the condition if LIST is FULL. This is useful operation to POOL and eating core to do this senseless operation. What more meaning ful is to raise INTERRUPT TO WAKE the CONSUMER by PRODUCER when the LIST IS FULL.
+
+V14 : CONDITIONAL VARIABLE ?
+		- In the previous PRODUCER/CONSUMER example, the POOLING operation of CONSUMER can be rectified using WAIT CLAUSE, WAIT helps to block the execution of CONSUMER and WAITS till PRODUCER THREADS met certain CONDITION. Indeed PRODUCER THREAD, raise SIGNAL when it meets the coniditon requested by CONSUMER. 
+
+V15 : CONDITION VARIABLE API:
+		- CONDITION VARIABLE DATA TYPE (must have reference to MUTEX and waiting threads)
+	 	- WAIT (MUTEX, CONDITION VARIABLE)
+		- SIGNAL (CONDITION VARIABLE) , It notify one thread waiting on condition and releases MUTEX.
+		- BROADCAST (CONDITION VARIABLE), It notify all threads waiting on condition varaibl but release mutex for one thread at a time.	
+
 		
