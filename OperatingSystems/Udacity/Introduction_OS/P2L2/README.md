@@ -79,4 +79,40 @@ V15 : CONDITION VARIABLE API:
 		- SIGNAL (CONDITION VARIABLE) , It notify one thread waiting on condition and releases MUTEX.
 		- BROADCAST (CONDITION VARIABLE), It notify all threads waiting on condition varaibl but release mutex for one thread at a time.	
 
-		
+V15 : READERS/WRITERS PROBLEM ?
+		- There is one shared file and can be any number of readers at a given instant but only one or zero writers. Also there cannot be read and write at the same time.
+		- Using Mutex lock mechanism is not very useful, cause it limits reader threads to one at any given time.
+		- So we use a PROXY VARIABLE for MUTEX to achieve required function. This PROXY VARIABLE can have three states which reflect the state of shared file,
+			1. > 0, any no. represents the no. of readers
+			2. = 0, No writer No Reader
+			3. = -1, Writer
+
+		- Any thread modifying PROXY VARIABLE requires mutex lock.
+
+V16 :  READER/WRITER EXAMPLE ?
+		- We need, int resource_counter; Mutex counter_mutex; Condition read_phase, write_phase;
+		- READER :
+					- Lock counter_mutex
+					- check if counter_mutex = -1, True : Wait for read_phase signal , Else : increment resource_counter.
+					- Unlock counter_mutex
+
+					// READ THE FILE
+
+					- Lock counter_mutex
+					- decrement resource_counter
+					- check if resource_counter = 0, if True : Signal write_phase, Else : continue
+					- Unlock
+
+		- WRITER :
+					- Lock resource_counter
+					- check if resource_counter != 0, True : Wait for write_signal; else : set resource_counter= -1.
+					- unlock resource_counter
+
+					// WRITE THE FILE
+
+					- Lock the resource_counter
+					- Set the resource counter = 0
+					- Signal write_phase, Broad_Cast Read_Phase
+					- Unlock.
+
+V17 : CRITICAL SECTION STRUCTURE ?
