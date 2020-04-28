@@ -116,3 +116,27 @@ V16 :  READER/WRITER EXAMPLE ?
 					- Unlock.
 
 V17 : CRITICAL SECTION STRUCTURE ?
+		- In WRITER/READER example, we have seen how PRIMITIVE LOCK is used to create CUSTOMIZED LOCK mechanism around our real CRITICAL SECTION.
+		- In READER THREAD, the LOCK before READ is referred as ENTER CRITICAL SECTION which is our CUSTOMIZED LOCK for READER THREAD. The LOCK after READ is referred as EXIT CRITICAL SECTION which is our CUSTOMIZED UNLOCK for READER THREAD. It's similar to WRITER THREAD as well.
+
+V18 : CRITICAL SECTION STRUCTURE WITH PROXY VARIABLE ?
+		- Using PROXY VARIABLE & MUTEX, we can build CUSTOMIZED LOCK MECHANISM that satisfy READER/WRITER REQUIREMENT.
+			//ENTER CRITICAL SECTION (primitive mutex structure)
+			READ/WRITE SHARED FILE
+			//EXIT CRITICAL SECTION (primitive mutex structure)
+
+V19 : COMMON MISTAKES ? 
+		- Must use right mutex for right operations in all threads.
+		- Use lock/unlock constructs the right way.
+		- Ensure single mutex to access single resource.
+		- Ensure we are signalling correct condition variable.
+		- Ensure correct use of SIGNAL & BROADCAST.
+		- SIGNALLING OR BROADCAST doesn't guarentee order of thread wakeups
+
+V20 : SPURIOUS WAKE-UPS ? => UNNECESSARY WAKEUPS
+		- As we saw earlier, using SIGNALLING for BROADCAST is will have performance penality but using BROADCAST for SIGNALLING is acceptable.
+		- SPURIOUS WAKEUPS doesn't effect CORRECTNESS but can impact PERFORMANCE.
+		- In Scenario of WRITER THEAD, after issuing BROADCAST it takes few more cycles to unlock mutex, meanwhile if any wait threads in CONDITION VARIABLE QUEUE will WAKESUP and realizes the MUTEX IS LOCKED and again WAITS on MUTEX QUEUE. It indeed, just bringing threads waiting from in one queue to another queue, which takes CPU cycles and reduce CPU performance. This is referred to SPURIOUS WAKEUPS.
+		- It can be avoided by BROADCASTING after UNLOCKING. But this way of doing SIGNALLING is not always possible.
+
+		
