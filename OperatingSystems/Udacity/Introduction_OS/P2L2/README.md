@@ -139,4 +139,33 @@ V20 : SPURIOUS WAKE-UPS ? => UNNECESSARY WAKEUPS
 		- In Scenario of WRITER THEAD, after issuing BROADCAST it takes few more cycles to unlock mutex, meanwhile if any wait threads in CONDITION VARIABLE QUEUE will WAKESUP and realizes the MUTEX IS LOCKED and again WAITS on MUTEX QUEUE. It indeed, just bringing threads waiting from in one queue to another queue, which takes CPU cycles and reduce CPU performance. This is referred to SPURIOUS WAKEUPS.
 		- It can be avoided by BROADCASTING after UNLOCKING. But this way of doing SIGNALLING is not always possible.
 
-		
+V21 : DEADLOCKS INTRODUCTION ?
+		- It is simply two threads waiting on one another and no one goes to finish execution ever.
+
+V22 : DEADLOCK WITH EXAMPLE & FEW STRATEGIES TO AVOID DEADLOCKS ?
+		- We have TWO thread that follows, ----->LOCK_A----->LOCK_B----->FOO1(A,B)	
+		- In this scenario, if one thread acquires LOCK_A and other thread acquires LOCK_B earlier and after few cycles earlier thread tries to LOCK_B & later thread tries to LOCK_A, then both the threads will have cyclic dependency and obviously fell in to DEADLOCK SITUATION.
+		- To avoid such CYCLIC DEPENDENCY PROBLEM, we have few strategies like
+			1. FINE-GRAINED LOCKING - In this mechanism, we unlock any already locked mutex before locking next mutex, it seems to work well but not in our case, cause FOO(A,B) needs both the RESOURCES.
+			2. SINGLE COMPOUND MUTEX - We can have one customized MUTEX at the beginning of each thread that locks all the required mutex at the beginning, it has overhead on performance.
+		   *3. LOCK ORDER - CONSIDERED BEST IN OUR CASE, Having a lock order is refinement of 2, but only aquiring locks when needed.
+
+V23 : WHAT TO DO WITH DEADLOCKS ? 
+		- Three ways we can handle DEADLOCKS
+			1. PREVENTION, By beforehand analyzing the every acquired lock condition and ensuring it wont cause DEADLOCKS, is very EXPENSIVE.
+			2. DETECTION & RECOVERY, It seems to be reliable but practically not possible in real time systems when inputs are coming from external source, It have ROLLBACK OVERHEAD
+			3. OSTRICH ALGORITHM, Use V22 defined strategies and DO NOTHING just like an OSTRICH. Even having optimized strategy like LOCK ORDER is not always avoid DEADLOCK SITUATIONS, in that case system will reboot.
+		- In PERFORMACE CRITICAL SYSTEMS, since REBOOT is not a better choice, even if it's EXPENSIVE always good to use 1 or 2 according to the situation.
+
+V24 : KERNEL VS USER LEVEL THREADS ?
+		- The KERNEL level threads are either threads associated with USER LEVEL threads or threads that performing OS sevices like demon services.
+		- There are THREE MODELS that define how kernel level threads are associated with user level threads and are discussed below lectures
+		- Before looking in to these models, let's understand why there must be an association between KERNEL & USER THREADS ?????
+				==> OS Schduler only schedules KERNEL LEVEL THREADS. For any USER LEVEL THREAD to access hw resources, they must be associated with KERNEL LEVEL THREAD.
+
+V25 : MULTI-THREADING MODEL ?
+		- There are maily three models that defines how kernel level threads and user level threads are assosicated with each other.
+			1. ONE-TO-ONE MAPPING : Every created thread at USER LEVEL has its own KERNEL LEVEL THREAD. + => OS manages all the synchronization and scheduling mechanisms. - ==> Expensive due to USER/KERNEL TRANSITIONS and sync and sched is limited by OS policies.
+			2. MANY-TO-ONE MAPPING : It has thread management library at USER LEVEL so that it has full support unlike one to one. - ==> when one USER LEVEL thread blocks, OS blocks the whole PROCESS.
+			3. MANY-TO-MANY MAPPINGS : Few USER threads are mapped on to single KERNEL THREAD and few USER threads that require contineous execution are mapped on to single KERNEL THREAD. - ==> It must have some co-ordination between USER AND KERNEL LEVEL THREAD MANAGERS. 
+
