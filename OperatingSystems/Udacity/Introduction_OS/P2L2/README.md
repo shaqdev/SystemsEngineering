@@ -169,3 +169,27 @@ V25 : MULTI-THREADING MODEL ?
 			2. MANY-TO-ONE MAPPING : It has thread management library at USER LEVEL so that it has full support unlike one to one. - ==> when one USER LEVEL thread blocks, OS blocks the whole PROCESS.
 			3. MANY-TO-MANY MAPPINGS : Few USER threads are mapped on to single KERNEL THREAD and few USER threads that require contineous execution are mapped on to single KERNEL THREAD. - ==> It must have some co-ordination between USER AND KERNEL LEVEL THREAD MANAGERS. 
 
+V26 : SCOPE OF MULTI-THREADING ?
+		- In general, there exists two levels of THREAD MANAGEMENT SYSTEM
+			1. PROCESS SCOPE
+			2. SYSTEM SCOPE
+		- 1. Process Scope : It is managed by USER LEVEL THREAD MANAGEMENT LIBRARY. It can be different instances of same library or different processes have different libraries. What ever each instance has scope limited to single process. It is responsible to schedule and synchronize across threads in corresponding process.
+		- 2. System Scope : In this, all the threads are visible to OS scheduler and managed by restricted policies of OS thread management system. 
+		- How CPU Core is shared across all user level threads are depend upon what MULTI-THREADING MODEL that process uses.
+
+V27 : MULTI-THREADING PATTERNS ?
+		- DESIGN PATTERNS for structuring APPLICATION in to MULTI-THREADING 
+		- Example with TOY SHOP ORDER, and different tasks involved are,
+			1. Accepting the order
+			2. Parsing the order
+			3. Cut wooden parts
+			4. Paint & add decorations
+			5. Assemble the parts
+			6. Ship the order
+		- Since we cannot have all 6 threads and we should design the whole TOY SHOP ORDER mechanism in effective way.
+		- There are 3 MAIN MULTI-THREADING PATTERNS
+			1. BOSS/WORKERS PATTERN
+			2. PIPELINE PATTERN
+			3. LAYERED PATTERN
+
+V28 : 
