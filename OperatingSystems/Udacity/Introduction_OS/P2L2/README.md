@@ -34,5 +34,138 @@ V5 : ARE THREADS USEFUL ON SINGLE CPU ?
 v6 : MULTI-THREADING is useful to both APP & OS ?
 		- OS kernel also uses multi-threaded programming for spawning threads working on behalf of apps and threads that run OS -level services like daemons or device drivers. MORE IN COMING LECTURES.
 
+V7 : What do we need to support threads?
+		- Data Structure for threads, to identify threads and their resource usage.
+		- Mechanism to create and manage threads
+		- Mechanism to safely coordinate between threads while running concurrently.
+		- Issues associated with concurrent execution:
+			- DATA RACE PROBLEM, since concurrent threads have same virual to physical mappings, multiple threads can access data at same time which leads to corruption.
+		The below two mechanisms are SYNCHRONIZATION MECHANISMS :
+		---------------------------------------------------------
+		- To avoid DATA RACE PROBLEM, threads must have mechanism to execute in mutually exclusive manner. which means the operation that can lead DRP should allow only one thread to perform that operation at a time. Primitive that used for mutual exclusion is MUTEX.
+		- Mutual exclusion is also helpful while one thread is waitng for other thread execution to complete and specify what it wants from it. The primitive used for this mechanism is called CONDITION VARIABLE.
 
+V8 : THREAD & THREAD CREATION:
+		- We need Thread DS that has information related to thread (like ID, PC, SP, REGISTERS, STACK, ATTRIBUTES used by OS to manage thread)
+		- Creating a thread as proposed by BIRREL, FORK that returns thread handler of type thread data structure.
+		- BIRREL proposes one more mechanism called JOIN that will make parent thread to wait till child thread terminates and returns the FIRST PROCEDURE VALUE. If child thread terminates even before join call, it returs immediately (WHAT ABOUT RETURN VALUE, WILL IT BE LIVE OR EVAPORATED ? I feel EVAPORATED).
+
+V9 : THREAD CREATION:
+		- t = fork(procedure, arguments)
+		- join(t)
+
+V10 : LINKED LIST updated with THREADS ?
+		- While two threads trying to update list concurrently, since two threads will be interleaved on the cores randomly, only last executed thread will be updated while first updated will be overridden.
+
+V11 : MUTUAL EXCLUSION ?
+		- MUTUAL EXCLUSION is a mechanism to provide lock around some section of the code. This lock is referred as MUTEX and section is referred as CRITICAL SECTION.
+		- The other threads when reached already locked CRITICAL SECTION should wait till the owner of the critical section unlocks it.
+		- As soon as the thread that aquired MUTEX unlocks it, any thread already waiting one or just that requested lock can take control of the MUTEX. 
+		- More modern OS uses lock and unlock as two separate API's unlike single LOCK CLAUSE with {} by BIRREL.
+
+V12 : USING PREVIOUS LINKED LIST AND APPY MUTEX FOR SAFE INSERTION
+
+V13 : PRODUCER/CONSUMER EXAMPLE ?
+		- PRODUCER has 10 threads which contineously insert to the LIST one after other
+		- CONSUMER will check if LIST is FULL, PRINTS & CLEARS the LIST if FULL.
+		- In the CONSUMER procedure it contineously POOLS to check the condition if LIST is FULL. This is useful operation to POOL and eating core to do this senseless operation. What more meaning ful is to raise INTERRUPT TO WAKE the CONSUMER by PRODUCER when the LIST IS FULL.
+
+V14 : CONDITIONAL VARIABLE ?
+		- In the previous PRODUCER/CONSUMER example, the POOLING operation of CONSUMER can be rectified using WAIT CLAUSE, WAIT helps to block the execution of CONSUMER and WAITS till PRODUCER THREADS met certain CONDITION. Indeed PRODUCER THREAD, raise SIGNAL when it meets the coniditon requested by CONSUMER. 
+
+V15 : CONDITION VARIABLE API:
+		- CONDITION VARIABLE DATA TYPE (must have reference to MUTEX and waiting threads)
+	 	- WAIT (MUTEX, CONDITION VARIABLE)
+		- SIGNAL (CONDITION VARIABLE) , It notify one thread waiting on condition and releases MUTEX.
+		- BROADCAST (CONDITION VARIABLE), It notify all threads waiting on condition varaibl but release mutex for one thread at a time.	
+
+V15 : READERS/WRITERS PROBLEM ?
+		- There is one shared file and can be any number of readers at a given instant but only one or zero writers. Also there cannot be read and write at the same time.
+		- Using Mutex lock mechanism is not very useful, cause it limits reader threads to one at any given time.
+		- So we use a PROXY VARIABLE for MUTEX to achieve required function. This PROXY VARIABLE can have three states which reflect the state of shared file,
+			1. > 0, any no. represents the no. of readers
+			2. = 0, No writer No Reader
+			3. = -1, Writer
+
+		- Any thread modifying PROXY VARIABLE requires mutex lock.
+
+V16 :  READER/WRITER EXAMPLE ?
+		- We need, int resource_counter; Mutex counter_mutex; Condition read_phase, write_phase;
+		- READER :
+					- Lock counter_mutex
+					- check if counter_mutex = -1, True : Wait for read_phase signal , Else : increment resource_counter.
+					- Unlock counter_mutex
+
+					// READ THE FILE
+
+					- Lock counter_mutex
+					- decrement resource_counter
+					- check if resource_counter = 0, if True : Signal write_phase, Else : continue
+					- Unlock
+
+		- WRITER :
+					- Lock resource_counter
+					- check if resource_counter != 0, True : Wait for write_signal; else : set resource_counter= -1.
+					- unlock resource_counter
+
+					// WRITE THE FILE
+
+					- Lock the resource_counter
+					- Set the resource counter = 0
+					- Signal write_phase, Broad_Cast Read_Phase
+					- Unlock.
+
+V17 : CRITICAL SECTION STRUCTURE ?
+		- In WRITER/READER example, we have seen how PRIMITIVE LOCK is used to create CUSTOMIZED LOCK mechanism around our real CRITICAL SECTION.
+		- In READER THREAD, the LOCK before READ is referred as ENTER CRITICAL SECTION which is our CUSTOMIZED LOCK for READER THREAD. The LOCK after READ is referred as EXIT CRITICAL SECTION which is our CUSTOMIZED UNLOCK for READER THREAD. It's similar to WRITER THREAD as well.
+
+V18 : CRITICAL SECTION STRUCTURE WITH PROXY VARIABLE ?
+		- Using PROXY VARIABLE & MUTEX, we can build CUSTOMIZED LOCK MECHANISM that satisfy READER/WRITER REQUIREMENT.
+			//ENTER CRITICAL SECTION (primitive mutex structure)
+			READ/WRITE SHARED FILE
+			//EXIT CRITICAL SECTION (primitive mutex structure)
+
+V19 : COMMON MISTAKES ? 
+		- Must use right mutex for right operations in all threads.
+		- Use lock/unlock constructs the right way.
+		- Ensure single mutex to access single resource.
+		- Ensure we are signalling correct condition variable.
+		- Ensure correct use of SIGNAL & BROADCAST.
+		- SIGNALLING OR BROADCAST doesn't guarentee order of thread wakeups
+
+V20 : SPURIOUS WAKE-UPS ? => UNNECESSARY WAKEUPS
+		- As we saw earlier, using SIGNALLING for BROADCAST is will have performance penality but using BROADCAST for SIGNALLING is acceptable.
+		- SPURIOUS WAKEUPS doesn't effect CORRECTNESS but can impact PERFORMANCE.
+		- In Scenario of WRITER THEAD, after issuing BROADCAST it takes few more cycles to unlock mutex, meanwhile if any wait threads in CONDITION VARIABLE QUEUE will WAKESUP and realizes the MUTEX IS LOCKED and again WAITS on MUTEX QUEUE. It indeed, just bringing threads waiting from in one queue to another queue, which takes CPU cycles and reduce CPU performance. This is referred to SPURIOUS WAKEUPS.
+		- It can be avoided by BROADCASTING after UNLOCKING. But this way of doing SIGNALLING is not always possible.
+
+V21 : DEADLOCKS INTRODUCTION ?
+		- It is simply two threads waiting on one another and no one goes to finish execution ever.
+
+V22 : DEADLOCK WITH EXAMPLE & FEW STRATEGIES TO AVOID DEADLOCKS ?
+		- We have TWO thread that follows, ----->LOCK_A----->LOCK_B----->FOO1(A,B)	
+		- In this scenario, if one thread acquires LOCK_A and other thread acquires LOCK_B earlier and after few cycles earlier thread tries to LOCK_B & later thread tries to LOCK_A, then both the threads will have cyclic dependency and obviously fell in to DEADLOCK SITUATION.
+		- To avoid such CYCLIC DEPENDENCY PROBLEM, we have few strategies like
+			1. FINE-GRAINED LOCKING - In this mechanism, we unlock any already locked mutex before locking next mutex, it seems to work well but not in our case, cause FOO(A,B) needs both the RESOURCES.
+			2. SINGLE COMPOUND MUTEX - We can have one customized MUTEX at the beginning of each thread that locks all the required mutex at the beginning, it has overhead on performance.
+		   *3. LOCK ORDER - CONSIDERED BEST IN OUR CASE, Having a lock order is refinement of 2, but only aquiring locks when needed.
+
+V23 : WHAT TO DO WITH DEADLOCKS ? 
+		- Three ways we can handle DEADLOCKS
+			1. PREVENTION, By beforehand analyzing the every acquired lock condition and ensuring it wont cause DEADLOCKS, is very EXPENSIVE.
+			2. DETECTION & RECOVERY, It seems to be reliable but practically not possible in real time systems when inputs are coming from external source, It have ROLLBACK OVERHEAD
+			3. OSTRICH ALGORITHM, Use V22 defined strategies and DO NOTHING just like an OSTRICH. Even having optimized strategy like LOCK ORDER is not always avoid DEADLOCK SITUATIONS, in that case system will reboot.
+		- In PERFORMACE CRITICAL SYSTEMS, since REBOOT is not a better choice, even if it's EXPENSIVE always good to use 1 or 2 according to the situation.
+
+V24 : KERNEL VS USER LEVEL THREADS ?
+		- The KERNEL level threads are either threads associated with USER LEVEL threads or threads that performing OS sevices like demon services.
+		- There are THREE MODELS that define how kernel level threads are associated with user level threads and are discussed below lectures
+		- Before looking in to these models, let's understand why there must be an association between KERNEL & USER THREADS ?????
+				==> OS Schduler only schedules KERNEL LEVEL THREADS. For any USER LEVEL THREAD to access hw resources, they must be associated with KERNEL LEVEL THREAD.
+
+V25 : MULTI-THREADING MODEL ?
+		- There are maily three models that defines how kernel level threads and user level threads are assosicated with each other.
+			1. ONE-TO-ONE MAPPING : Every created thread at USER LEVEL has its own KERNEL LEVEL THREAD. + => OS manages all the synchronization and scheduling mechanisms. - ==> Expensive due to USER/KERNEL TRANSITIONS and sync and sched is limited by OS policies.
+			2. MANY-TO-ONE MAPPING : It has thread management library at USER LEVEL so that it has full support unlike one to one. - ==> when one USER LEVEL thread blocks, OS blocks the whole PROCESS.
+			3. MANY-TO-MANY MAPPINGS : Few USER threads are mapped on to single KERNEL THREAD and few USER threads that require contineous execution are mapped on to single KERNEL THREAD. - ==> It must have some co-ordination between USER AND KERNEL LEVEL THREAD MANAGERS. 
 
