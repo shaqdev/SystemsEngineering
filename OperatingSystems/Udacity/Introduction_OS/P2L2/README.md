@@ -192,4 +192,40 @@ V27 : MULTI-THREADING PATTERNS ?
 			2. PIPELINE PATTERN
 			3. LAYERED PATTERN
 
-V28 : 
+V28 : BOSS/WORKER PATTERN ?
+		- Single BOSS and multiple Workers example for performing TOY SHOP ORDER, where task 1 from above list is executed by BOSS and 2-6 are executed by WORKERS. Worker threads should perform any of the tasks from 2-6.
+		- THROUGHPUT of SYSTEM : The number of process system executed per unit time.
+		- The THROUGHPUT of the system is majorly limited by BOSS THREAD's performance
+		- How the work is shared by BOSS TO WORKERS ?
+			1. HANDSHAKE MECHANISM : Where BOSS keep track for every thread and assigns new task to available thread. + is No need of Synch between WORKER THREADS. - is less throughput of the system as BOSS THREAD is doing lot work.
+			2. READY QUEUE : It can implement ready queue with PRODUCER-CONSUMER MECHANISM, so that BOSS will just insert new task in to queue and WORKER thread in wait queue automatically signalled, + is more throughput and - is need synch between WORKER THREADS, also need sync b/w BOSS & WORKER THREADS.
+
+V29 : CONTINUE... HOW MANY WORKERS ?
+		- With limited number of WORKER threads, if the work need to performed is more. Then the BOSS thread should wait for WORKER thread to be available. In this case throughput of the system will reduce. However, having more number of WORKER THREDS will add more overhead before hand having more work.
+		- So there are two techniques which allow BOSS thread to increase number of WORKER THREADS according to demand.
+			1. ON DEMAND, dynamically add WORKER THREADS - Sometimes it may have some overhead of loading new thread
+			2. WORKER-POOL - Having Pool of workers with size of pool decided statically or dynamically is efficient accroding to the type of work they do.
+		- Overall, BOSS - WORKER PATTERN with PRODUCER-CONSUMER shared Queue works WELL but since boss doesn't have any track of workers. The advantage of using right thread for right task will be lost.	 
+
+V30 : CONTINUE...BOSS/WORKER VARIANTS ?
+		-  To achieve LOCALITY, (assigning right work to right thread) BOSS THREAD rather than just broadcasting the tasks, it can wake the specialized threads for corresponding tasks.
+		- This will enable specialized threads to make use of their CACHE and achieve high perormance. 
+		- But in this case LOAD BALANCING is complicated cause in broadcasting we can simply maintain WORKERS POOL but here it's difficult to choose how many threads should assign for each specific task.
+
+V31 : PIPELINE PATTERN ?
+		- Whole process is divided in to SEQUENCE OF STAGES
+		- Each stage == subtask
+		- Each stage == thread pool, It will try to maintain balance between all stages.
+		- Must establish buffer based communication b/w each stage.
+
+		+ is Specialized threads leads to LOCALITY
+		- is LOAD BALANCIGN & SYNCHRONIZATION, maintaining right thread pool is very important as it may lead to unbalanced stages which increases overhead of waiting earlier threads for later threads to finish execution.
+
+V32 : LAYERED PATTERN ?
+		- All the subtasks are grouped in to layers and layers stacked together.
+		- Specialized threads for each subtask are assigned to a layer.
+		- The execution will traverse end-to-end bi-direction through all the layers.
+
+		+ is LOCALITY and able to choose right pool of threds easily
+		- is Not applicable to all applications and synchronization is difficult as the sync must exists in two ways between each layers.
+		
