@@ -1,0 +1,1 @@
+int add_foo(int, int);
