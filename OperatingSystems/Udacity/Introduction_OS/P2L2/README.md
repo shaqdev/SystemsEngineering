@@ -15,7 +15,7 @@ V2 : Visual Metaphor
 			3. Must have good coordination - SYNCHRONIZATION
 
 v3 : PROCESS vs THREAD
-		- PROCESS has single execution context where THREADS enable process to have multiple execution context. Which means THREADS will have shared virual address but seperate REGISTERS & STACK.
+		- PROCESS has single execution context where THREADS enable process to have multiple execution context. Which means THREADS will have shared virtual address but seperate REGISTERS & STACK.
 		- PCB in single threaded process is different from PCB from multi threaded process. In multi-threaded process, shared information will be common while individual information will be separated.
 
 V4: Why are THREADS USEFUL ?
