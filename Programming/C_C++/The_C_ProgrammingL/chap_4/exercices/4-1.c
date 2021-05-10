@@ -10,18 +10,14 @@ Write the function strrindex(s,t), which returns the position of the rightmost o
 int strrindex(char s[], char t[]){
     // Assume t is string
     int pos = -1;
-    int i,j;
+    int i,j,k;
 
-    for(i = 0; strlen(s) >= strlen(t) + i; ++i){
-        for(j = 0; j < strlen(t); ++j){
-            if (s[i+j] == t[j]){
-                if(j == strlen(t) - 1)
-                    pos = i;
-                continue;
-            }
-            else 
-                break;
+    for(i = 0; s[i] != '\0'; ++i){
+        for(j = i, k = 0; s[j] != '\0' && t[k] != '\0'; ++j, ++k){
+            ;
         }
+        if (t > 0 && t[k] == '\0')
+            pos = i;
     }
     return pos;
 }
@@ -34,5 +30,5 @@ int main()
     printf("%d\n",pos);
     assert(pos == 6);
 
-    return 0;
+    return 6;
 }
