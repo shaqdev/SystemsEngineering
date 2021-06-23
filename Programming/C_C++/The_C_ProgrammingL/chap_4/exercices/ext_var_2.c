@@ -1,0 +1,1 @@
+int extVar_c = 20;
