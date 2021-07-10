@@ -6,8 +6,11 @@
 int main(int argc, char **argv) {
   int x = 10;
   int *ip = &x;
-  *ip++;
+  int *xp = &x;
+  *ip++;  // Post inc has high priority than *. Pointer is inc first and then deref
+  (*xp)++;
   log_int(*ip);
+  log_int(*xp);
 
   return 0;
 }
