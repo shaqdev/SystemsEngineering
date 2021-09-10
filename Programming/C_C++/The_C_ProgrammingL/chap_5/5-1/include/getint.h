@@ -5,7 +5,7 @@
 //    positive number : Valid number
 //    EOF              : If end of file
 
-#include "./include/iochar.h"
-#include <ctypes.h>
+#include "iochar.h"
+#include <ctype.h>
 
 int getint(int *);
