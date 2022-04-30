@@ -8,27 +8,20 @@ int getint(int *ip) {
     ;
   
   // Return 0 if not digit or sign
-  if (!(isdigit(c)) && !(c == '+' || c == '-'))
+  if (!isdigit(c) && c != '+' && c != '-' && c != EOF)
+    //ungetch(c);
     return 0;
 
-  // Return positive value if digit 
-  // Return signed value if sign followed by digit
-  // Return sign if only sign is given
-  if (isdigit(c))
-    return (*ip = atoi(c));
-  else {
-    sign = (c == '-') ? -1 : 1;
-    if(isdigit(c = getch())){
-      *ip = sign * atoi(c);
-      return *ip;
-    }
-    else
-      return sign;
-  }
+  sign = (c == '-') ? -1 : 1;
 
-  // if EOF unget the char and return
-  if (c == EOF) {
-    ungetch(c);
-    return c;
-  }
+  if(c == '+' || c == '-')
+    getch();
+
+  for(*ip = 0; isdigit(c); c = getch())
+    *ip = 10 * *ip + (c - '0');
+
+  *ip *= sign;
+
+  return c;
+  
 }
