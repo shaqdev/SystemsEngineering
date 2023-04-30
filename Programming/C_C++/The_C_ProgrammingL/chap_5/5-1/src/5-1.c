@@ -8,11 +8,15 @@
 
 int main(int argc, char **argv) {
   int c, arr[MAX_VAL], getint(int *);
-  for (c = 0; c < MAX_VAL && getint(&arr[c]) != EOF; ++c)
+
+  for (int i = 0; i < MAX_VAL; ++i)
+    printf("%d\n",arr[i]);
+  
+  for (c = 0; c < MAX_VAL && getint(&arr[c]) != EOF; ++c) // Bug fixes in get int
     ;
   
-  
-  for (int i = 0; printf("%d\n",arr[i]) && c >= 0; ++i, --c)
-    ;
+  for (int i = 0; i < MAX_VAL; ++i)
+    printf("%d\n",arr[i]);
+
   return 0;
 }
